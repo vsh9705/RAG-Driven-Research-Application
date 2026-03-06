@@ -16,34 +16,37 @@
         <div class="status-bar">
             <span id="statusText">System Ready</span>
             <span id="paperCount">0 documents indexed</span>
-            <span id="evalCount">0 evaluations completed</span>
         </div>
 
         <div class="tabs">
             <button class="tab active" onclick="showTab('upload')">Document Management</button>
             <button class="tab" onclick="showTab('query')">Query Interface</button>
-            <button class="tab" onclick="showTab('evaluate')">Evaluation</button>
-            <button class="tab" onclick="showTab('stats')">Analytics</button>
         </div>
 
         <!-- Upload Tab -->
         <div id="uploadTab" class="tab-content active">
             <h2>Document Management</h2>
             <p class="help-text">Upload and index research papers for analysis</p>
-            
+
             <div class="section">
                 <label for="fileInput">Select PDF Documents</label>
                 <input type="file" id="fileInput" accept=".pdf" multiple>
                 <button onclick="uploadFiles()" class="btn btn-primary">Upload Documents</button>
             </div>
-            
+
             <div id="uploadedPapers"></div>
-            
+
             <div class="section" style="margin-top: 24px;">
                 <h3>Index Documents</h3>
                 <p class="help-text">Process uploaded documents and create searchable index</p>
                 <button onclick="ingestDocuments()" class="btn btn-success">Start Indexing</button>
                 <div id="ingestionStatus"></div>
+            </div>
+
+            <div class="section" style="margin-top: 24px;">
+                <h3>Performance Statistics</h3>
+                <button onclick="showStats()" class="btn btn-secondary">View System Stats</button>
+                <div id="perfStats"></div>
             </div>
 
             <div class="section" style="margin-top: 24px; border: 1px solid var(--danger-color);">
@@ -54,96 +57,23 @@
             </div>
         </div>
 
-
         <!-- Query Tab -->
         <div id="queryTab" class="tab-content">
             <h2>Query Interface</h2>
             <p class="help-text">Search across indexed research papers using natural language</p>
-            
+
             <div class="section">
                 <label for="questionInput">Research Question</label>
-                <textarea id="questionInput" rows="3" 
+                <textarea id="questionInput" rows="3"
                     placeholder="Enter your research question (e.g., What are the primary security vulnerabilities in distributed file sharing systems?)"></textarea>
-                
+
                 <label for="topKInput">Number of Source Documents</label>
                 <input type="number" id="topKInput" value="5" min="1" max="20">
-                
+
                 <button onclick="queryRAG()" class="btn btn-primary">Execute Query</button>
             </div>
-            
+
             <div id="queryResults"></div>
-        </div>
-
-        <!-- Evaluate Tab -->
-        <div id="evaluateTab" class="tab-content">
-            <h2>Response Evaluation</h2>
-            <p class="help-text">Assess the quality and accuracy of system responses</p>
-            
-            <div id="evaluationForm" style="display: none;">
-                <div class="card">
-                    <h3>Query Details</h3>
-                    <p><strong>Response ID:</strong> <span class="response-id" id="evalResponseId"></span></p>
-                    <p><strong>Question:</strong></p>
-                    <p id="evalQuestion" style="margin-left: 16px; color: var(--text-secondary);"></p>
-                </div>
-                
-                <div class="card">
-                    <h3>System Response</h3>
-                    <p id="evalAnswer"></p>
-                </div>
-                
-                <div class="card">
-                    <h3>Source Citations</h3>
-                    <div id="evalSources"></div>
-                </div>
-                
-                <div class="section" style="margin-top: 24px;">
-                    <h3>Quality Metrics</h3>
-                    
-                    <div class="eval-grid">
-                        <div class="eval-field">
-                            <label>Relevance (1-5)</label>
-                            <p class="help-text">Domain appropriateness of sources</p>
-                            <input type="number" id="relevanceScore" min="1" max="5" value="3">
-                        </div>
-                        
-                        <div class="eval-field">
-                            <label>Citation Accuracy (1-5)</label>
-                            <p class="help-text">Correctness of citations</p>
-                            <input type="number" id="hallucinationScore" min="1" max="5" value="3">
-                        </div>
-                        
-                        <div class="eval-field">
-                            <label>Completeness (1-5)</label>
-                            <p class="help-text">Coverage of question aspects</p>
-                            <input type="number" id="completenessScore" min="1" max="5" value="3">
-                        </div>
-                        
-                        <div class="eval-field">
-                            <label>Faithfulness (1-5)</label>
-                            <p class="help-text">Grounding in retrieved sources</p>
-                            <input type="number" id="faithfulnessScore" min="1" max="5" value="3">
-                        </div>
-                    </div>
-                    
-                    <label>Evaluation Notes</label>
-                    <textarea id="evalNotes" rows="3" 
-                        placeholder="Optional: Add detailed observations or specific issues identified"></textarea>
-                    
-                    <button onclick="submitEvaluation()" class="btn btn-success">Submit Evaluation</button>
-                </div>
-            </div>
-            
-            <div id="noResponseMessage" class="info">
-                No response available for evaluation. Please execute a query first.
-            </div>
-        </div>
-
-        <!-- Statistics Tab -->
-        <div id="statsTab" class="tab-content">
-            <h2>Analytics Dashboard</h2>
-            <p class="help-text">Aggregate metrics and evaluation history</p>
-            <div id="statsContent"></div>
         </div>
     </div>
 
